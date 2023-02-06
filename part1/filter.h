@@ -31,7 +31,9 @@ class mutex {
       victim[i] = me;
       for (int k = 0; k < n; k ++) {
 	if (k != me) {
-	  while (level[k] >= i && victim[i] == me) {}
+	  while (level[k] >= i && victim[i] == me) {
+	    this_thread::yield;
+	  }
 	}
       }
     }
