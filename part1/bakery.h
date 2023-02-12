@@ -31,18 +31,14 @@ class mutex {
     // Implement me!
     flag[thread_id] = true;
     ticketNum ++;
-    label[thread_id] = ticketNum;
+    label[thread_id] = ticketNum.load();
 
     while (label[thread_id] != curServing.load()) {}
-    for (int i = 0; i < thread_id; i ++) {
-      if (flag[i] && label[i] == curServing.load()) {
-	while (flag[i]){}
-      }
-    }
   }
   
   void unlock(int thread_id) {
     // Implement me!
+    //printf("UNLOCK\n\n");
     flag[thread_id] = false;
 
     int tmp = curServing.load();
@@ -55,5 +51,5 @@ class mutex {
   atomic_bool *flag;
   atomic_int *label;
   atomic_int curServing;
-  int ticketNum;
+  atomic_int ticketNum;
 };
