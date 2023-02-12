@@ -10,16 +10,20 @@ class rw_mutex {
     // Implement me!
     num_readers = 0;
     writer = false;
+    w_req = false;
   }
 
   void lock_reader() {
     // Implement me!
     bool acquired = false;
-    while (!acquired) {
+    while (!acquired && !w_req) {
       internal_mutex.lock();
       if (!writer) {
 	acquired = true;
 	num_readers ++;
+      }
+      else {
+	//w_req = true;
       }
       internal_mutex.unlock();
     }
@@ -58,4 +62,5 @@ class rw_mutex {
   int num_readers;
   bool writer;
   mutex internal_mutex;
+  bool w_req;
 };
