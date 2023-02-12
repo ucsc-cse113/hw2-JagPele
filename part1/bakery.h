@@ -10,7 +10,7 @@ class mutex {
   }
 
   int n;
-  int ticketNum;
+  atomic_int ticketNum;
   
   void init (int num_threads) {
     // Implement me!
@@ -22,7 +22,8 @@ class mutex {
     
     
     for (int i = 0; i < n; i ++) {
-      flag[i] = false; label[i] = 0;
+      flag[i] = false;
+      label[i] = 0;
     }
   }
   
@@ -34,9 +35,13 @@ class mutex {
 
     for (int i = 0; i < n; i ++) {
       if (i != thread_id) {
-	while (label[i] < label[thread_id]){}
+	while (label[i] < label[thread_id]){
+	  printf("While 1\n");
+	}
 	if (label[i] == label[thread_id]) {
-	  while (i < thread_id){}
+	  while (i < thread_id){
+	    printf("while2\n");
+	  }
 	}
       }
     }
