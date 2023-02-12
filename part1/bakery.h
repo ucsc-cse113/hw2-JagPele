@@ -14,8 +14,6 @@ class mutex {
   void init (int num_threads) {
     // Implement me!
     n = num_threads;
-    ticketNum = 0;
-    curServing = 1;
     
     flag = new atomic_bool[n];
     label = new atomic_int[n];
@@ -30,26 +28,28 @@ class mutex {
   void lock(int thread_id) {
     // Implement me!
     flag[thread_id] = true;
-    ticketNum ++;
-    label[thread_id] = ticketNum.load();
 
-    while (label[thread_id] != curServing.load()) {}
+    int tmp = label[0];
+    for (int i = 1; i < n; i ++) {
+      if (label[i] > tmp) {
+	tmp = label[i];
+      }
+    }
+    label[thread_id] = tmp;
+
+    for (int k = 0; k < n; k++) {
+      while (flag[k] && label[k] < label[thread_id] | ( flag[k] && label[k] == label[thread_id] && k < thread_id)) {}
+    }
   }
   
   void unlock(int thread_id) {
     // Implement me!
     //printf("UNLOCK\n\n");
     flag[thread_id] = false;
-
-    int tmp = curServing.load();
-    tmp ++;
-    curServing.store(tmp);
   }
 
  private:
   // Give me some private variables!
   atomic_bool *flag;
   atomic_int *label;
-  atomic_int curServing;
-  atomic_int ticketNum;
 };
