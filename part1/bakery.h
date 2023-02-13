@@ -17,42 +17,44 @@ class mutex {
     
     flag = new atomic_bool[n];
     label = new atomic_int[n];
-    max = new int[n];
+    max = new atomic_int[n];
     
     
     for (int i = 0; i < n; i ++) {
-      flag[i] = false;
-      label[i] = 0;
-      max[i] = 0;
+      flag[i].store(false); // = false;
+      label[i].store(0); // = 0;
+      max[i].store(0); // = 0;
     }
   }
   
   void lock(int thread_id) {
     // Implement me!
-    flag[thread_id] = true;
+    flag[thread_id].store(true); // = true;
 
-    max[thread_id] = label[0];
+    max[thread_id].store(label[0].load()); // = label[0].load();
     for (int i = 1; i < n; i ++) {
-      if (label[i] > max[thread_id]) {
-	max[thread_id] = label[i];
+      if (label[i].load() > max[thread_id].load()) {
+	max[thread_id].store(label[i].load()); // = label[i].load();
       }
     }
-    label[thread_id] = max[thread_id];
+    label[thread_id].store(max[thread_id].load()); // = max[thread_id];
 
     for (int k = 0; k < n; k++) {
-      while (flag[k] && label[k] < label[thread_id] | ( flag[k] && label[k] == label[thread_id] && k < thread_id)) {}
+      if ( k != thread_id) {
+	while ((flag[k].load() && label[k].load() < label[thread_id].load()) || (flag[k].load() && label[k].load() == label[thread_id].load() && k < thread_id)) {}
+      }
     }
   }
   
   void unlock(int thread_id) {
     // Implement me!
     //printf("UNLOCK\n\n");
-    flag[thread_id] = false;
+    flag[thread_id].store(false); // = false;
   }
 
  private:
   // Give me some private variables!
   atomic_bool *flag;
   atomic_int *label;
-  int *max;
+  atomic_int *max;
 };

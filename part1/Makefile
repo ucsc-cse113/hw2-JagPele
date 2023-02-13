@@ -10,5 +10,5 @@ clean:
 test:
 	g++ -std=c++14 -DCPP_MUTEX  -fsanitize=thread main.cpp -pthread -o cpp_mutex_test
 	g++ -std=c++14 -DFILTER_MUTEX main.cpp -fsanitize=thread -pthread -o filter_mutex_test
-	g++ -std=c++14 -DBAKERY_MUTEX main.cpp -fsanitize=thread -pthread -o bakery_mutex_test
+	g++ -std=c++14 -DBAKERY_MUTEX main.cpp -fsanitize=thread -g -pthread -o bakery_mutex_test
 
