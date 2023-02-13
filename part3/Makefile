@@ -8,8 +8,8 @@ clean:
 	rm -f coarse_lock_stack rw_lock_stack swaptop_stack *~
 
 test:
-	g++ -DCOARSE_LOCK -fsanitize=thread main.cpp -pthread -o coarse_lock_stack_test
-	g++ -DRW_LOCK -fsanitize=thread -std=c++17 main.cpp -pthread -o rw_lock_stack_test
+	g++ -DCOARSE_LOCK -fsanitize=thread -g main.cpp -pthread -o coarse_lock_stack_test
+	g++ -DRW_LOCK -fsanitize=thread -g -std=c++17 main.cpp -pthread -o rw_lock_stack_test
 	g++ -DSWAPTOP -fsanitize=thread -g -std=c++17 main.cpp -pthread -o swaptop_stack_test
 
 sequential:

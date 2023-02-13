@@ -20,17 +20,22 @@ class CSE113_Stack {
   }
   
   int pop() {
+    //printf("pop req\n")
+    m.lock();
     if (start == NULL) {
+      m.unlock();
       return -1;
     }
-
+    
     if (start->next == NULL) {
       int ret = start->data;
       delete start;
       start = NULL;
+      m.unlock();
       return ret;
     }
 
+    //m.lock();
     Llist_node *current = start->next;
     Llist_node *previous = start;
     while (current->next != NULL) {
@@ -41,12 +46,16 @@ class CSE113_Stack {
     int ret = current->data;
     previous->next = NULL;
     delete current;
+    m.unlock();
     return ret;
   }
 
   
   int peek() {
+    m.lock();
+    //printf("peek req\n");
     if (start == NULL) {
+      m.unlock();
       return -1;
     }
     
@@ -54,13 +63,17 @@ class CSE113_Stack {
     while (current->next != NULL) {
       current = current->next;
     }
-    return current->data;    
+    int ret = current->data;
+    m.unlock();
+    return ret;
   }
   
   void push(int p) {
+    //printf("push req\n");
+    m.lock();
     if (start == NULL) {
-
       start = new Llist_node(p);
+      m.unlock();
       return;
     }
 
@@ -68,11 +81,12 @@ class CSE113_Stack {
     while (current->next != NULL) {
       current = current->next;
     }
-
     current->next = new Llist_node(p);
+    m.unlock();
   }
 
  private:
-  Llist_node *start;  
+  Llist_node *start;
+  mutex m;
 };
 
