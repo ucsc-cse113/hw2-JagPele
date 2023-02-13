@@ -105,11 +105,11 @@ class CSE113_Stack {
     m.unlock_shared();
     
     m.lock();
-    cur =  start;
-    while (cur->next != NULL) {
-      cur = cur->next;
+    Llist_node *current =  start;
+    while (current->next != NULL) {
+      current = current->next;
     }
-    cur->data = to_swap;
+    current->data = to_swap;
 
     m.unlock();
     return;
