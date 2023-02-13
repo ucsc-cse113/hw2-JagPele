@@ -17,13 +17,11 @@ class mutex {
     
     flag = new atomic_bool[n];
     label = new atomic_int[n];
-    max = new atomic_int[n];
     
     
     for (int i = 0; i < n; i ++) {
       flag[i].store(false); // = false;
       label[i].store(0); // = 0;
-      max[i].store(0); // = 0;
     }
   }
   
@@ -31,17 +29,17 @@ class mutex {
     // Implement me!
     flag[thread_id].store(true); // = true;
 
-    max[thread_id].store(label[0].load()); // = label[0].load();
+    int max = label[0].load();
     for (int i = 1; i < n; i ++) {
-      if (label[i].load() > max[thread_id].load()) {
-	max[thread_id].store(label[i].load()); // = label[i].load();
+      if (label[i].load() > max) {
+	max = label[i].load();
       }
     }
-    label[thread_id].store(max[thread_id].load()); // = max[thread_id];
+    label[thread_id].store(max + 1); // = max[thread_id];
 
     for (int k = 0; k < n; k++) {
       if ( k != thread_id) {
-	while ((flag[k].load() && label[k].load() < label[thread_id].load()) || (flag[k].load() && label[k].load() == label[thread_id].load() && k < thread_id)) {}
+	while (flag[k].load() && ((label[k].load() < label[thread_id].load()) || (label[k].load() == label[thread_id].load() && k < thread_id))) {}
       }
     }
   }
@@ -56,5 +54,4 @@ class mutex {
   // Give me some private variables!
   atomic_bool *flag;
   atomic_int *label;
-  atomic_int *max;
 };
