@@ -87,10 +87,10 @@ class CSE113_Stack {
 
   void swaptop(int to_swap) {
     // Implement me!
-    m.lock_shared();
+    m.lock();
 
     if (start == NULL) {
-      m.unlock_shared();
+      m.unlock();
       return;
     }
     
@@ -101,11 +101,14 @@ class CSE113_Stack {
     }
 
     if (cur->data == to_swap) {
-      m.unlock_shared();
+      m.unlock();
       return;
+    } else {
+      cur->data = to_swap;
     }
-    m.unlock_shared();
-    
+    m.unlock();
+    return;
+    /*
     m.lock();
     Llist_node *current =  start;
     while (current->next != NULL) {
@@ -115,6 +118,7 @@ class CSE113_Stack {
 
     m.unlock();
     return;
+    */
     
   }
 
