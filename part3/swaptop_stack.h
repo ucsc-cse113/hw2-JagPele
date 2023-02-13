@@ -16,7 +16,9 @@ class CSE113_Stack {
  public:
   
   CSE113_Stack() {
+    m.lock();
     start = NULL;
+    m.unlock();
   }
   
   int pop() {
