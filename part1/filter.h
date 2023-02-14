@@ -32,7 +32,7 @@ class mutex {
       for (int k = 0; k < n; k ++) {
 	if (k != me) {
 	  while (level[k].load() >= i && victim[i].load() == me) {
-	    // this_thread::yield;
+	   this_thread::yield;
 	  }
 	}
       }

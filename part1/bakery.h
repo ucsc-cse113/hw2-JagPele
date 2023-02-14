@@ -40,7 +40,7 @@ class mutex {
     for (int k = 0; k < n; k++) {
       if ( k != thread_id) {
 	while (flag[k].load() && ((label[k].load() < label[thread_id].load()) || (label[k].load() == label[thread_id].load() && k < thread_id))) {
-	  //  this_thread::yield;
+	  this_thread::yield;
 	}
       }
     }
