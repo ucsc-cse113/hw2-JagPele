@@ -100,10 +100,7 @@ class CSE113_Stack {
       cur = cur->next;
     }
 
-    if (cur->data == to_swap) {
-      m.unlock();
-      return;
-    } else {
+    if (cur->data != to_swap) {
       cur->data = to_swap;
     }
     m.unlock();
