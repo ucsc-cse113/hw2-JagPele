@@ -39,7 +39,9 @@ class rw_mutex {
     // Implement me!
     //printf("Writer req\n");
     bool acquired = false;
-    w_req ++; 
+    internal_mutex.lock();
+    w_req ++;
+    internal_mutex.unlock();
     //printf("OUT OF WRITE MUTEX 1\n");
     while (!acquired) {
       //printf("In write while, W_REQ = %d\n", w_req.load());
@@ -52,6 +54,7 @@ class rw_mutex {
       }
       internal_mutex.unlock();
     }
+    //internal_mutex.unlock();
   }
   
   void unlock() {
@@ -66,5 +69,5 @@ class rw_mutex {
   int num_readers;
   bool writer;
   mutex internal_mutex;
-  atomic_int w_req;
+  int w_req;
 };

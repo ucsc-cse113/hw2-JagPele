@@ -18,7 +18,7 @@ class mutex {
     victim = new atomic_int[num_threads];
 
     for (int i = 0; i < n; i ++) {
-      level[i].store(0); // = 0;
+      level[i] = 0;
     }
   }
   
@@ -27,11 +27,11 @@ class mutex {
     int me = thread_id;
 
     for (int i = 1; i < n; i ++) {
-      level[me].store(i); // = i;
-      victim[i].store(me); // = me;
+      level[me] = i;
+      victim[i] = me;
       for (int k = 0; k < n; k ++) {
 	if (k != me) {
-	  while (level[k].load() >= i && victim[i].load() == me) {
+	  while (level[k] >= i && victim[i] == me) {
 	    this_thread::yield;
 	  }
 	}
@@ -41,7 +41,7 @@ class mutex {
   
   void unlock(int thread_id) {
     // Implement me!
-    level[thread_id].store(0); // = 0;
+    level[thread_id] = 0;
   }
 
  private:

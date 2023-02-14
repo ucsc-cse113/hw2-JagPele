@@ -1,5 +1,6 @@
 #include <iostream>
 #include <thread>
+#include <atomic>
 #include <chrono>
 using namespace std;
 using namespace chrono;
